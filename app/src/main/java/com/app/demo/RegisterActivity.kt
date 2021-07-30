@@ -83,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
                         progressBar.visibility = View.GONE
                         createShortToast("Update profile for better experience")
                         openActivityWithFlags(MainActivity::class.java)
-//                        finish()
+                        finish()
                     }
 
                 }

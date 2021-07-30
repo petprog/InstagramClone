@@ -29,8 +29,7 @@
                     android:id="@+id/profileImage"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_margin="5dp" />
 
                 <TextView
                     android:id="@+id/username"
@@ -38,7 +37,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="5dp"
-                    android:text="Username"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -88,7 +86,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="123 likes"
                 android:textColor="@color/colorAccent"
 
                 android:textStyle="bold" />
@@ -98,19 +95,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Taiwo Farinu"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
 
             <com.hendraanggrian.appcompat.widget.SocialTextView
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="#fun #play"
-                android:id="@+id/description"
-                android:textColor="@color/colorAccent"/>
+                android:layout_marginBottom="5dp" />
 
             <TextView
                 android:id="@+id/no_of_comments"
@@ -119,7 +113,6 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="View all 123 comments"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 

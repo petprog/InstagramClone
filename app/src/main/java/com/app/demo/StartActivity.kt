@@ -51,8 +51,8 @@ class StartActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (FirebaseAuth.getInstance().currentUser != null) {
-//            openActivity(MainActivity::class.java)
-//            finish()
+            openActivity(MainActivity::class.java)
+            finish()
         }
     }
 }
