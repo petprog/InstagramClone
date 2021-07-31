@@ -48,7 +48,7 @@ class ProfileFragment : Fragment() {
                     var totalCount = 0
                     for (s in snapshot.children) {
                         val post = s.getValue(Post::class.java)!!
-                        if (post.postid == profileId) {
+                        if (post.publisher == profileId) {
                             totalCount += 1
                         }
                     }

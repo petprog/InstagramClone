@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.ProfileFragment">
@@ -69,7 +70,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:paddingStart="20dp"
                         android:paddingEnd="5dp">
@@ -97,7 +98,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="POSTS" />
+                                    android:text="POSTS"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -119,13 +121,14 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="FOLLOWERS" />
+                                    android:text="FOLLOWERS"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_marginStart="35dp"
                                 android:orientation="vertical">
 
@@ -141,7 +144,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="FOLLOWING" />
+                                    android:text="FOLLOWING"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
                         </LinearLayout>
@@ -150,7 +154,8 @@
                             android:id="@+id/edit_profile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp" />
+                            android:layout_marginTop="10dp"
+                            android:text="EDIT Profile" />
                     </LinearLayout>
 
 
@@ -192,7 +197,7 @@
                     android:layout_marginEnd="-5dp"
                     android:orientation="horizontal">
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/my_pictures"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="0dp"
@@ -200,7 +205,13 @@
                         android:layout_weight="1"
                         android:src="@drawable/ic_my_pictures" />
 
-                    <ImageView
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/colorAccent" />
+
+                    <ImageButton
                         android:id="@+id/saved_pictures"
                         style="?android:attr/buttonBarButtonStyle"
                         android:layout_width="0dp"
