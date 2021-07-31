@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import com.app.demo.adapter.PhotoAdapter
 import com.app.demo.databinding.FragmentProfileBinding
 import com.app.demo.model.Post
 import com.app.demo.model.User
@@ -21,8 +23,13 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var firebaseUser: FirebaseUser
+    private lateinit var photoAdapterPosts: PhotoAdapter
+    private lateinit var photoAdapterSaves: PhotoAdapter
+    private val posts = mutableListOf<Post>()
+    private val saves = mutableListOf<Post>()
 
     private lateinit var profileId: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +53,10 @@ class ProfileFragment : Fragment() {
         getFollowerAndFollowingCount()
 
         getPostCount()
+
+        loadPost()
+
+        loadSaves()
 
 
         if (profileId == firebaseUser.uid) {
@@ -76,7 +87,90 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+
+        binding.recyclerViewMyPictures.apply {
+            layoutManager = GridLayoutManager(context, 3)
+            setHasFixedSize(true)
+        }
+        binding.recyclerViewSavedPictures.apply {
+            layoutManager = GridLayoutManager(context, 3)
+            setHasFixedSize(true)
+        }
+        photoAdapterPosts = PhotoAdapter(posts)
+        photoAdapterSaves = PhotoAdapter(saves)
+
+        binding.recyclerViewMyPictures.adapter = photoAdapterPosts
+        binding.recyclerViewSavedPictures.adapter = photoAdapterSaves
+
+        binding.recyclerViewMyPictures.visibility = View.VISIBLE
+        binding.recyclerViewSavedPictures.visibility = View.GONE
+
+        binding.myPictures.setOnClickListener {
+            binding.recyclerViewMyPictures.visibility = View.VISIBLE
+            binding.recyclerViewSavedPictures.visibility = View.GONE
+        }
+        binding.savedPictures.setOnClickListener {
+            binding.recyclerViewMyPictures.visibility = View.GONE
+            binding.recyclerViewSavedPictures.visibility = View.VISIBLE
+        }
         return binding.root
+    }
+
+    private fun loadSaves() {
+        val savedIds = mutableListOf<String>()
+        FirebaseDatabase.getInstance().reference.child("Saves").child(profileId)
+            .addValueEventListener(object :
+                ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (snapshot in dataSnapshot.children) {
+                        val id = snapshot.key!!
+                        savedIds.add(id)
+                    }
+                    FirebaseDatabase.getInstance().reference.child("Posts").addValueEventListener(
+                        object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                for (snapshot in dataSnapshot.children) {
+                                    val post = snapshot.getValue(Post::class.java)!!
+                                    for (id in savedIds) {
+                                        if (post.postid == id) {
+                                            saves.add(post)
+                                        }
+                                    }
+                                }
+                                photoAdapterSaves.notifyDataSetChanged()
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+
+                            }
+                        })
+                    photoAdapterPosts.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
+    }
+
+    private fun loadPost() {
+        FirebaseDatabase.getInstance().reference.child("Posts").addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val post = snapshot.getValue(Post::class.java)!!
+                    if (post.publisher == profileId) {
+                        posts.add(post)
+                    }
+                }
+                posts.reversed()
+                photoAdapterPosts.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
     }
 
     private fun checkFollowingStatus() {

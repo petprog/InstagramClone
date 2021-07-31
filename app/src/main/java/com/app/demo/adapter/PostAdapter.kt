@@ -59,6 +59,7 @@ class PostAdapter(
                 isLiked(post.postid, like)
                 noOfLikes(post.postid, noOfLikes)
                 getComments(post.postid, noOfComments)
+                isSaved(post.postid, itemBinding.save)
                 like.setOnClickListener {
                     if (like.tag == "like") {
                         FirebaseDatabase.getInstance().reference.child("Likes").child(post.postid)
@@ -74,8 +75,38 @@ class PostAdapter(
                 noOfComments.setOnClickListener {
                     showComments(post)
                 }
+                save.setOnClickListener {
+                    if (save.tag == "save") {
+                        FirebaseDatabase.getInstance().reference.child("Saves")
+                            .child(firebaseUser.uid)
+                            .child(post.postid).setValue(true)
+                    } else {
+                        FirebaseDatabase.getInstance().reference.child("Saves")
+                            .child(firebaseUser.uid)
+                            .child(post.postid).removeValue()
+                    }
+                }
             }
 
+        }
+
+        private fun isSaved(postId: String, saveImageView: ImageView) {
+            FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid).addValueEventListener(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.child(postId).exists()) {
+                            itemBinding.save.setImageResource(R.drawable.ic_saved)
+                            saveImageView.tag = "saved"
+                        } else {
+                            itemBinding.save.setImageResource(R.drawable.ic_save)
+                            saveImageView.tag = "save"
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+                })
         }
 
         private fun showComments(post: Post) {

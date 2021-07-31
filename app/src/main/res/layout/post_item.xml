@@ -75,6 +75,7 @@
                     android:src="@drawable/ic_comment" />
 
                 <ImageView
+                    android:id="@+id/save"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
