@@ -40,7 +40,20 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-            HomeFragment()).commit()
+        val bundle: Bundle? = intent.extras
+
+        if (bundle != null) {
+            val profileId = intent.getStringExtra("publisher")
+
+            getSharedPreferences("PROFILE", MODE_PRIVATE).edit().putString("profileId", profileId)
+                .apply()
+
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+                ProfileFragment()).commit()
+            binding.bottomNavigation.selectedItemId = R.id.nav_profile
+        } else {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+                HomeFragment()).commit()
+        }
     }
 }

@@ -63,7 +63,7 @@ class CommentActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
         }
-        adapter = CommentAdapter(comments)
+        adapter = CommentAdapter(comments, postId)
         binding.recyclerViewComments.adapter = adapter
         loadComments()
     }
@@ -92,9 +92,14 @@ class CommentActivity : AppCompatActivity() {
 
     private fun putComment() {
         val map = HashMap<String, Any>()
+        val ref = FirebaseDatabase.getInstance().reference.child("Comments").child(postId)
+        val id = ref.push().key!!
+        map["id"] = id
         map["comment"] = binding.addComment.text.toString()
         map["publisher"] = firebaseUser.uid
-        FirebaseDatabase.getInstance().reference.child("Comments").child(postId).push()
+
+        binding.addComment.setText("")
+        ref.child(id)
             .setValue(map).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     createShortToast("Comment added!")

@@ -1,5 +1,6 @@
 package com.app.demo.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,14 +32,69 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        profileId = firebaseUser.uid
+        val data = requireContext().getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
+            .getString("profileId", "none")
+
+        profileId = if (data == "none") {
+            firebaseUser.uid
+        } else {
+            data!!
+        }
+
         userInfo()
 
         getFollowerAndFollowingCount()
 
         getPostCount()
 
+
+        if (profileId == firebaseUser.uid) {
+            binding.editProfile.text = "Edit profile"
+        } else {
+            checkFollowingStatus()
+        }
+
+        binding.editProfile.setOnClickListener {
+            val btnText = binding.editProfile.text.toString().lowercase()
+
+            if (btnText == "edit profile") {
+                // GOTO edit activity
+            } else {
+                if (btnText == "follow") {
+                    FirebaseDatabase.getInstance().reference.child("Follow")
+                        .child(firebaseUser.uid).child("following").child(profileId)
+                        .setValue(true)
+                    FirebaseDatabase.getInstance().reference.child("Follow")
+                        .child(profileId).child("followers").child(firebaseUser.uid)
+                        .setValue(true)
+                } else {
+                    FirebaseDatabase.getInstance().reference.child("Follow")
+                        .child(firebaseUser.uid).child("following").child(profileId).removeValue()
+                    FirebaseDatabase.getInstance().reference.child("Follow")
+                        .child(profileId).child("followers").child(firebaseUser.uid)
+                        .removeValue()
+                }
+            }
+        }
         return binding.root
+    }
+
+    private fun checkFollowingStatus() {
+        FirebaseDatabase.getInstance().reference.child("Follow")
+            .child(firebaseUser.uid).child("following").addValueEventListener(object :
+                ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child(profileId).exists()) {
+                        binding.editProfile.text = "following"
+                    } else {
+                        binding.editProfile.text = "follow"
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
     }
 
     private fun getPostCount() {
