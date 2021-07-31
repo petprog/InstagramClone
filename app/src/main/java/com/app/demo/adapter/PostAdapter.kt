@@ -3,11 +3,13 @@
 
 package com.app.demo.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.app.demo.CommentActivity
 import com.app.demo.R
 import com.app.demo.databinding.PostItemBinding
 import com.app.demo.model.Post
@@ -56,6 +58,7 @@ class PostAdapter(
                         })
                 isLiked(post.postid, like)
                 noOfLikes(post.postid, noOfLikes)
+                getComments(post.postid, noOfComments)
                 like.setOnClickListener {
                     if (like.tag == "like") {
                         FirebaseDatabase.getInstance().reference.child("Likes").child(post.postid)
@@ -65,9 +68,36 @@ class PostAdapter(
                             .child(firebaseUser.uid).removeValue()
                     }
                 }
-
+                comment.setOnClickListener {
+                    showComments(post)
+                }
+                noOfComments.setOnClickListener {
+                    showComments(post)
+                }
             }
 
+        }
+
+        private fun showComments(post: Post) {
+            val context = itemBinding.root.context
+            val intent = Intent(context, CommentActivity::class.java)
+            intent.putExtra("postId", post.postid)
+            intent.putExtra("authorId", post.publisher)
+            context.startActivity(intent)
+        }
+
+        private fun getComments(postId: String, textView: TextView) {
+            FirebaseDatabase.getInstance().reference.child("Comments").child(postId)
+                .addValueEventListener(
+                    object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            textView.text = "View All ${snapshot.childrenCount} Comments"
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+                    })
         }
 
         private fun isLiked(postId: String, imageView: ImageView) {
