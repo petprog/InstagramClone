@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.app.demo.EditProfileActivity
 import com.app.demo.adapter.PhotoAdapter
 import com.app.demo.databinding.FragmentProfileBinding
 import com.app.demo.model.Post
 import com.app.demo.model.User
+import com.app.demo.utils.openActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -69,7 +71,7 @@ class ProfileFragment : Fragment() {
             val btnText = binding.editProfile.text.toString().lowercase()
 
             if (btnText == "edit profile") {
-                // GOTO edit activity
+                context?.openActivity(EditProfileActivity::class.java)
             } else {
                 if (btnText == "follow") {
                     FirebaseDatabase.getInstance().reference.child("Follow")

@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             }
             if (selectorFragment != null) {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                    selectorFragment!!).commit()
+                    selectorFragment!!).addToBackStack(null).commit()
             }
             true
         }

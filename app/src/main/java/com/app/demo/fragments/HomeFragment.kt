@@ -57,6 +57,7 @@ class HomeFragment : Fragment() {
                     for (snapshot in dataSnapshot.children) {
                         followingList.add(snapshot.key!!)
                     }
+                    followingList.add(FirebaseAuth.getInstance().currentUser?.uid!!)
                     readPosts()
                     Log.d("Following Tag", followingList.toString())
                 }
