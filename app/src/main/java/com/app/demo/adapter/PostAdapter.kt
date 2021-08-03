@@ -112,8 +112,9 @@ class PostAdapter(
                     itemBinding.root.context.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
                         .edit()
                         .putString("postid", post.postid).apply()
-                    view.findNavController()
-                        .navigate(R.id.action_homeFragment_to_postDetailFragment)
+                    if (posts.size > 1)
+                        view.findNavController()
+                            .navigate(R.id.action_homeFragment_to_postDetailFragment)
                 }
             }
 
