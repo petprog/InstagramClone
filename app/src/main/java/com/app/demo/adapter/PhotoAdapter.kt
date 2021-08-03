@@ -4,15 +4,19 @@
 
 package com.app.demo.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.app.demo.R
 import com.app.demo.databinding.PhotoItemBinding
+import com.app.demo.fragments.PostDetailFragment
 import com.app.demo.model.Post
 import com.squareup.picasso.Picasso
 
-class PhotoAdapter(private val posts: List<Post>) : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
+class PhotoAdapter(private val posts: List<Post>) :
+    RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val itemBinding: PhotoItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
@@ -20,6 +24,13 @@ class PhotoAdapter(private val posts: List<Post>) : RecyclerView.Adapter<PhotoAd
         fun bind(post: Post) {
             Picasso.get().load(post.imageurl).placeholder(R.mipmap.ic_launcher)
                 .into(itemBinding.postImage)
+            itemBinding.postImage.setOnClickListener {
+                itemBinding.root.context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                    .putString("postid", post.postid).apply()
+
+                (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, PostDetailFragment()).addToBackStack(null).commit()
+            }
         }
     }
 

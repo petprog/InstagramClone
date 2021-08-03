@@ -3,15 +3,19 @@
 
 package com.app.demo.adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.app.demo.CommentActivity
 import com.app.demo.R
 import com.app.demo.databinding.PostItemBinding
+import com.app.demo.fragments.PostDetailFragment
+import com.app.demo.fragments.ProfileFragment
 import com.app.demo.model.Post
 import com.app.demo.model.User
 import com.google.firebase.auth.FirebaseAuth
@@ -86,27 +90,65 @@ class PostAdapter(
                             .child(post.postid).removeValue()
                     }
                 }
+
+                username.setOnClickListener {
+                    itemBinding.root.context.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("profileId", post.publisher).apply()
+
+                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ProfileFragment()).addToBackStack(null)
+                        .commit()
+                }
+                profileImage.setOnClickListener {
+                    itemBinding.root.context.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("profileId", post.publisher).apply()
+
+                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ProfileFragment()).addToBackStack(null)
+                        .commit()
+                }
+                author.setOnClickListener {
+                    itemBinding.root.context.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("profileId", post.publisher).apply()
+
+                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ProfileFragment()).addToBackStack(null)
+                        .commit()
+                }
+                postImage.setOnClickListener {
+                    itemBinding.root.context.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("postid", post.postid).apply()
+
+                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, PostDetailFragment()).addToBackStack(null)
+                        .commit()
+                }
             }
 
         }
 
         private fun isSaved(postId: String, saveImageView: ImageView) {
-            FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid).addValueEventListener(
-                object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.child(postId).exists()) {
-                            itemBinding.save.setImageResource(R.drawable.ic_saved)
-                            saveImageView.tag = "saved"
-                        } else {
-                            itemBinding.save.setImageResource(R.drawable.ic_save)
-                            saveImageView.tag = "save"
+            FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid)
+                .addValueEventListener(
+                    object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.child(postId).exists()) {
+                                itemBinding.save.setImageResource(R.drawable.ic_saved)
+                                saveImageView.tag = "saved"
+                            } else {
+                                itemBinding.save.setImageResource(R.drawable.ic_save)
+                                saveImageView.tag = "save"
+                            }
                         }
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
+                        override fun onCancelled(error: DatabaseError) {
 
-                    }
-                })
+                        }
+                    })
         }
 
         private fun showComments(post: Post) {

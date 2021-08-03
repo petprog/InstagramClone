@@ -50,7 +50,12 @@ class MainActivity : AppCompatActivity() {
 
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
                 ProfileFragment()).commit()
-            binding.bottomNavigation.selectedItemId = R.id.nav_profile
+            if (profileId != null) {
+                binding.bottomNavigation.selectedItemId = R.id.nav_profile
+            } else {
+                binding.bottomNavigation.selectedItemId = R.id.nav_home
+            }
+
         } else {
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
                 HomeFragment()).commit()

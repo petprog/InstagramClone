@@ -106,10 +106,12 @@ class ProfileFragment : Fragment() {
         binding.recyclerViewSavedPictures.visibility = View.GONE
 
         binding.myPictures.setOnClickListener {
+            loadPost()
             binding.recyclerViewMyPictures.visibility = View.VISIBLE
             binding.recyclerViewSavedPictures.visibility = View.GONE
         }
         binding.savedPictures.setOnClickListener {
+            loadSaves()
             binding.recyclerViewMyPictures.visibility = View.GONE
             binding.recyclerViewSavedPictures.visibility = View.VISIBLE
         }
@@ -122,6 +124,7 @@ class ProfileFragment : Fragment() {
             .addValueEventListener(object :
                 ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    saves.clear()
                     for (snapshot in dataSnapshot.children) {
                         val id = snapshot.key!!
                         savedIds.add(id)
@@ -157,6 +160,7 @@ class ProfileFragment : Fragment() {
         FirebaseDatabase.getInstance().reference.child("Posts").addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                posts.clear()
                 for (snapshot in dataSnapshot.children) {
                     val post = snapshot.getValue(Post::class.java)!!
                     if (post.publisher == profileId) {
@@ -195,6 +199,7 @@ class ProfileFragment : Fragment() {
         FirebaseDatabase.getInstance().reference.child("Posts").addValueEventListener(
             object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    posts.clear()
                     var totalCount = 0
                     for (s in snapshot.children) {
                         val post = s.getValue(Post::class.java)!!
