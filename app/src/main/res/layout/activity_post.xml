@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".PostActivity">
+<layout>
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".PostActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/bar"
@@ -63,10 +63,10 @@
                 android:src="@mipmap/ic_launcher" />
 
             <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:id="@+id/description"
                 android:hint="Description"
                 android:maxLines="5"
                 app:hashtagColor="@color/colorPrimary"

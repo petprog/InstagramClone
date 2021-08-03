@@ -9,13 +9,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.app.demo.CommentActivity
 import com.app.demo.R
 import com.app.demo.databinding.PostItemBinding
-import com.app.demo.fragments.PostDetailFragment
-import com.app.demo.fragments.ProfileFragment
 import com.app.demo.model.Post
 import com.app.demo.model.User
 import com.google.firebase.auth.FirebaseAuth
@@ -91,41 +89,31 @@ class PostAdapter(
                     }
                 }
 
-                username.setOnClickListener {
+                username.setOnClickListener { view ->
+                    itemBinding.root.context.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("profileId", post.publisher).apply()
+                    view.findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+                }
+                profileImage.setOnClickListener { view ->
                     itemBinding.root.context.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
                         .edit()
                         .putString("profileId", post.publisher).apply()
 
-                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, ProfileFragment()).addToBackStack(null)
-                        .commit()
+                    view.findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
                 }
-                profileImage.setOnClickListener {
+                author.setOnClickListener { view ->
                     itemBinding.root.context.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
                         .edit()
                         .putString("profileId", post.publisher).apply()
-
-                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, ProfileFragment()).addToBackStack(null)
-                        .commit()
+                    view.findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
                 }
-                author.setOnClickListener {
-                    itemBinding.root.context.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
-                        .edit()
-                        .putString("profileId", post.publisher).apply()
-
-                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, ProfileFragment()).addToBackStack(null)
-                        .commit()
-                }
-                postImage.setOnClickListener {
+                postImage.setOnClickListener { view ->
                     itemBinding.root.context.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
                         .edit()
                         .putString("postid", post.postid).apply()
-
-                    (itemBinding.root.context as FragmentActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, PostDetailFragment()).addToBackStack(null)
-                        .commit()
+                    view.findNavController()
+                        .navigate(R.id.action_homeFragment_to_postDetailFragment)
                 }
             }
 
