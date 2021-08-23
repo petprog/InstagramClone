@@ -66,6 +66,7 @@ class PostAdapter(
                     if (like.tag == "like") {
                         FirebaseDatabase.getInstance().reference.child("Likes").child(post.postid)
                             .child(firebaseUser.uid).setValue(true)
+                        addNotification(post.postid, firebaseUser.uid)
                     } else {
                         FirebaseDatabase.getInstance().reference.child("Likes").child(post.postid)
                             .child(firebaseUser.uid).removeValue()
@@ -117,6 +118,18 @@ class PostAdapter(
                             .navigate(R.id.action_homeFragment_to_postDetailFragment)
                 }
             }
+
+        }
+
+        private fun addNotification(postId: String, publisherId: String) {
+            val map = HashMap<String, Any>()
+            map["userid"] = publisherId
+            map["postid"] = postId
+            map["text"] = "liked your post."
+            map["isPost"] = true
+
+            FirebaseDatabase.getInstance().reference.child("Notifications").child(publisherId)
+                .push().setValue(map)
 
         }
 

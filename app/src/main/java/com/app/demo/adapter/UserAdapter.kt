@@ -48,6 +48,7 @@ class UserAdapter(private val users: List<User>, var isFragment: Boolean) :
                         FirebaseDatabase.getInstance().reference.child("Follow")
                             .child(user.id).child("followers").child(firebaseUser.uid)
                             .setValue(true)
+                        addNotification(user.id)
                     } else {
                         FirebaseDatabase.getInstance().reference.child("Follow")
                             .child(firebaseUser.uid).child("following").child(user.id).removeValue()
@@ -58,6 +59,17 @@ class UserAdapter(private val users: List<User>, var isFragment: Boolean) :
                 }
             }
 
+        }
+
+        private fun addNotification(id: String) {
+            val map = HashMap<String, Any>()
+            map["userid"] = firebaseUser.uid
+            map["postid"] = ""
+            map["text"] = "started following you."
+            map["isPost"] = false
+
+            FirebaseDatabase.getInstance().reference.child("Notifications").child(id)
+                .push().setValue(map)
         }
 
         private fun isFollowed(id: String, btnFollow: Button) {
